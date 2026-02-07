@@ -12,8 +12,17 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Redirect home to projects */}
-        <Route path="/" element={<Navigate to="/projects" replace />} />
+        {/* Home redirects based on login */}
+        <Route
+          path="/"
+          element={
+            localStorage.getItem("token") ? (
+              <Navigate to="/projects" replace />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
 
         {/* Public routes */}
         <Route path="/register" element={<Register />} />
