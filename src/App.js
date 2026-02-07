@@ -8,38 +8,18 @@ import Tickets from "./pages/Tickets";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-// Optional: redirect logged-in users away from login/register
-function LoggedInRedirect({ children }) {
-  const token = localStorage.getItem("token");
-  return token ? <Navigate to="/projects" replace /> : children;
-}
-
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Home always goes to login */}
+        {/* Always start at login */}
         <Route path="/" element={<Navigate to="/login" replace />} />
 
         {/* Public routes */}
-        <Route
-          path="/register"
-          element={
-            <LoggedInRedirect>
-              <Register />
-            </LoggedInRedirect>
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            <LoggedInRedirect>
-              <Login />
-            </LoggedInRedirect>
-          }
-        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-        {/* Protected dashboard routes */}
+        {/* Protected routes */}
         <Route
           path="/projects"
           element={
