@@ -8,31 +8,38 @@ import Tickets from "./pages/Tickets";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-function App() {
+// Optional: redirect logged-in users away from login/register
+function LoggedInRedirect({ children }) {
   const token = localStorage.getItem("token");
+  return token ? <Navigate to="/projects" replace /> : children;
+}
 
+function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Home redirects based on login */}
-        <Route
-          path="/"
-          element={
-            token ? <Navigate to="/projects" replace /> : <Navigate to="/login" replace />
-          }
-        />
+        {/* Home always goes to login */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
 
-        {/* Public routes (redirect if already logged in) */}
+        {/* Public routes */}
         <Route
           path="/register"
-          element={token ? <Navigate to="/projects" replace /> : <Register />}
+          element={
+            <LoggedInRedirect>
+              <Register />
+            </LoggedInRedirect>
+          }
         />
         <Route
           path="/login"
-          element={token ? <Navigate to="/projects" replace /> : <Login />}
+          element={
+            <LoggedInRedirect>
+              <Login />
+            </LoggedInRedirect>
+          }
         />
 
-        {/* Dashboard routes — protected */}
+        {/* Protected dashboard routes */}
         <Route
           path="/projects"
           element={
@@ -43,7 +50,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/projects/:projectId"
           element={
