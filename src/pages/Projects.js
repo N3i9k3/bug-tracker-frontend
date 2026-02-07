@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -8,7 +8,7 @@ export default function Projects() {
   const token = localStorage.getItem("token");
 
   // ===== Fetch Projects =====
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     if (!token) return;
 
     try {
@@ -20,7 +20,7 @@ export default function Projects() {
     } catch (err) {
       console.error("Error fetching projects:", err);
     }
-  };
+  }, [token]); // ✅ include token as dependency
 
   // ===== Create Project =====
   const createProject = async (e) => {
@@ -51,16 +51,16 @@ export default function Projects() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // remove from UI instantly
       setProjects((prev) => prev.filter((p) => p._id !== id));
     } catch (err) {
       console.error("Error deleting project:", err);
     }
   };
 
+  // ✅ Updated useEffect
   useEffect(() => {
     fetchProjects();
-  }, [token]);
+  }, [fetchProjects]); // include fetchProjects in deps
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">

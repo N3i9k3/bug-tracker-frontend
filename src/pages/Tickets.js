@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useParams, useSearchParams } from "react-router-dom";
 import KanbanBoard from "../components/KanbanBoard";
@@ -9,7 +9,7 @@ export default function Tickets() {
 
   // ================= AUTH =================
   const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user")); // ✅ IMPORTANT
+  const user = JSON.parse(localStorage.getItem("user"));
 
   // ================= STATE =================
   const [tickets, setTickets] = useState([]);
@@ -32,7 +32,7 @@ export default function Tickets() {
   });
 
   // ================= FETCH =================
-  const fetchTickets = async () => {
+  const fetchTickets = useCallback(async () => {
     try {
       const query = new URLSearchParams(filters).toString();
 
@@ -47,17 +47,17 @@ export default function Tickets() {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [filters, projectId, token]); // ✅ dependencies for fetchTickets
 
   // ================= SYNC FILTERS → URL =================
   useEffect(() => {
     setSearchParams(filters);
-  }, [filters]);
+  }, [filters, setSearchParams]); // ✅ include setSearchParams
 
   // ================= AUTO FETCH =================
   useEffect(() => {
     fetchTickets();
-  }, [projectId]);
+  }, [fetchTickets]); // ✅ include fetchTickets
 
   // ================= CREATE =================
   const createTicket = async (e) => {
@@ -208,8 +208,8 @@ export default function Tickets() {
         tickets={tickets}
         updateStatus={updateStatus}
         token={token}
-        user={user}           // ✅ REQUIRED
-        fetchTickets={fetchTickets} // ✅ REQUIRED
+        user={user}
+        fetchTickets={fetchTickets}
       />
     </div>
   );

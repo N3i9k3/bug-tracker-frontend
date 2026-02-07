@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { fetchComments, addComment } from "../services/commentApi";
 
 export default function Comments({ ticketId, token }) {
   const [comments, setComments] = useState([]); // ✅ default empty array
   const [text, setText] = useState("");
 
-  const loadComments = async () => {
+  // ✅ Wrap loadComments in useCallback so it can be safely used in useEffect deps
+  const loadComments = useCallback(async () => {
     try {
       const data = await fetchComments(ticketId, token);
       setComments(data || []); // ✅ fallback
@@ -13,11 +14,12 @@ export default function Comments({ ticketId, token }) {
       console.error("Failed to load comments:", err);
       setComments([]);
     }
-  };
+  }, [ticketId, token]); // ✅ dependencies of loadComments
 
+  // ✅ Include loadComments in useEffect deps
   useEffect(() => {
     loadComments();
-  }, [ticketId]); // ✅ reload if ticket changes
+  }, [loadComments]); // ✅ now React knows about dependency
 
   const handleAdd = async () => {
     if (!text.trim()) return;
