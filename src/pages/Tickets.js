@@ -7,8 +7,9 @@ export default function Tickets() {
   const { projectId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // ================= TOKEN =================
+  // ================= AUTH =================
   const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user")); // ✅ IMPORTANT
 
   // ================= STATE =================
   const [tickets, setTickets] = useState([]);
@@ -22,7 +23,7 @@ export default function Tickets() {
     status: "todo",
   });
 
-  // ================= FILTERS (PERSISTENT) =================
+  // ================= FILTERS =================
   const [filters, setFilters] = useState({
     status: searchParams.get("status") || "",
     priority: searchParams.get("priority") || "",
@@ -30,18 +31,22 @@ export default function Tickets() {
     search: searchParams.get("search") || "",
   });
 
-  // ================= FETCH TICKETS =================
+  // ================= FETCH =================
   const fetchTickets = async () => {
-    const query = new URLSearchParams(filters).toString();
+    try {
+      const query = new URLSearchParams(filters).toString();
 
-    const res = await axios.get(
-      `http://localhost:5000/api/tickets/project/${projectId}?${query}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+      const res = await axios.get(
+        `http://localhost:5000/api/tickets/project/${projectId}?${query}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
-    setTickets(res.data || []);
+      setTickets(res.data || []);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   // ================= SYNC FILTERS → URL =================
@@ -54,46 +59,44 @@ export default function Tickets() {
     fetchTickets();
   }, [projectId]);
 
-  // ================= CREATE TICKET =================
+  // ================= CREATE =================
   const createTicket = async (e) => {
     e.preventDefault();
 
-    await axios.post(
-      "http://localhost:5000/api/tickets",
-      { ...form, projectId },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    try {
+      await axios.post(
+        "http://localhost:5000/api/tickets",
+        { ...form, projectId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-    setForm({
-      title: "",
-      description: "",
-      priority: "medium",
-      assignee: "",
-      status: "todo",
-    });
+      setForm({
+        title: "",
+        description: "",
+        priority: "medium",
+        assignee: "",
+        status: "todo",
+      });
 
-    fetchTickets();
+      fetchTickets();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  // ================= DELETE =================
-  const deleteTicket = async (id) => {
-    await axios.delete(
-      `http://localhost:5000/api/tickets/${id}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-
-    fetchTickets();
-  };
-
-  // ================= UPDATE STATUS =================
+  // ================= UPDATE STATUS (Drag & Drop) =================
   const updateStatus = async (id, status) => {
-    await axios.put(
-      `http://localhost:5000/api/tickets/${id}/status`,
-      { status },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    try {
+      await axios.put(
+        `http://localhost:5000/api/tickets/${id}/status`,
+        { status },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-    fetchTickets();
+      fetchTickets();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   // ================= UI =================
@@ -101,7 +104,7 @@ export default function Tickets() {
     <div className="max-w-6xl mx-auto space-y-8 p-6">
       <h1 className="text-2xl font-semibold">Project Tickets</h1>
 
-      {/* ================= FILTER FORM ================= */}
+      {/* ================= FILTERS ================= */}
       <div className="flex gap-2 mb-4 flex-wrap">
         <select
           className="border p-1"
@@ -147,7 +150,7 @@ export default function Tickets() {
         </button>
       </div>
 
-      {/* ================= CREATE FORM ================= */}
+      {/* ================= CREATE ================= */}
       <div className="bg-white rounded-2xl shadow p-6">
         <h2 className="font-medium mb-4">Create New Ticket</h2>
 
@@ -205,6 +208,8 @@ export default function Tickets() {
         tickets={tickets}
         updateStatus={updateStatus}
         token={token}
+        user={user}           // ✅ REQUIRED
+        fetchTickets={fetchTickets} // ✅ REQUIRED
       />
     </div>
   );

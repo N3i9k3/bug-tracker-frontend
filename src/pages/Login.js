@@ -22,13 +22,16 @@ export default function Login() {
         form
       );
 
+      // ================= STORE AUTH =================
+      // token for API calls
       localStorage.setItem("token", res.data.token);
+
+      // user object for frontend permission checks
+      // ⚠ Make sure backend returns: { _id, name, email, ... }
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-
-      // ✅ React way (no page refresh)
+      // ✅ Navigate to projects dashboard
       navigate("/projects");
-
     } catch (error) {
       alert(error.response?.data?.message || "Login failed");
     }
@@ -36,23 +39,15 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 p-6">
-
-      {/* Card */}
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 space-y-6">
-
         {/* Heading */}
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-indigo-600">
-            BugTracker
-          </h1>
-          <p className="text-gray-500 text-sm mt-1">
-            Sign in to continue
-          </p>
+          <h1 className="text-3xl font-bold text-indigo-600">BugTracker</h1>
+          <p className="text-gray-500 text-sm mt-1">Sign in to continue</p>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-
           <input
             type="email"
             name="email"
@@ -91,7 +86,6 @@ export default function Login() {
             Register
           </Link>
         </p>
-
       </div>
     </div>
   );

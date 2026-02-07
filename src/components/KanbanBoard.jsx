@@ -4,7 +4,8 @@ import {
   Draggable
 } from "@hello-pangea/dnd";
 
-import Comments from "./Comments"; // ⭐ Step 1
+import TicketCard from "./TicketCard";
+import Comments from "./Comments";
 
 const columns = {
   todo: "To Do",
@@ -12,7 +13,14 @@ const columns = {
   done: "Done"
 };
 
-export default function KanbanBoard({ tickets, updateStatus, token }) { // ⭐ Step 2
+export default function KanbanBoard({
+  tickets,
+  updateStatus,
+  token,
+  user,
+  fetchTickets
+}) {
+  // ================= DRAG =================
   const onDragEnd = (result) => {
     if (!result.destination) return;
 
@@ -22,9 +30,11 @@ export default function KanbanBoard({ tickets, updateStatus, token }) { // ⭐ S
     updateStatus(ticketId, newStatus);
   };
 
+  // ================= UI =================
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="grid grid-cols-3 gap-4">
+
         {Object.entries(columns).map(([key, title]) => (
           <Droppable droppableId={key} key={key}>
             {(provided) => (
@@ -48,12 +58,17 @@ export default function KanbanBoard({ tickets, updateStatus, token }) { // ⭐ S
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="bg-white p-3 mb-2 rounded shadow"
+                          className="mb-2"
                         >
-                          <p className="font-medium">{ticket.title}</p>
-                          <p className="text-xs mb-2">{ticket.priority}</p>
+                          {/* ✅ Ticket UI */}
+                          <TicketCard
+                            ticket={ticket}
+                            token={token}
+                            user={user}
+                            fetchTickets={fetchTickets}
+                          />
 
-                          {/* ⭐ Step 3 — COMMENTS */}
+                          {/* ✅ Comments */}
                           <Comments
                             ticketId={ticket._id}
                             token={token}
@@ -68,6 +83,7 @@ export default function KanbanBoard({ tickets, updateStatus, token }) { // ⭐ S
             )}
           </Droppable>
         ))}
+
       </div>
     </DragDropContext>
   );
