@@ -6,34 +6,39 @@ import Login from "./pages/Login";
 import Projects from "./pages/Projects";
 import Tickets from "./pages/Tickets";
 import Layout from "./components/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         {/* Redirect home to projects */}
-        <Route path="/" element={<Navigate to="/projects" />} />
+        <Route path="/" element={<Navigate to="/projects" replace />} />
 
         {/* Public routes */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
 
-        {/* Dashboard routes (wrapped with Layout) */}
+        {/* Dashboard routes — protected */}
         <Route
           path="/projects"
           element={
-            <Layout>
-              <Projects />
-            </Layout>
+            <ProtectedRoute>
+              <Layout>
+                <Projects />
+              </Layout>
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/projects/:projectId"
           element={
-            <Layout>
-              <Tickets />
-            </Layout>
+            <ProtectedRoute>
+              <Layout>
+                <Tickets />
+              </Layout>
+            </ProtectedRoute>
           }
         />
       </Routes>
