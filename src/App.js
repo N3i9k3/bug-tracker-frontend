@@ -9,6 +9,8 @@ import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
+  const token = localStorage.getItem("token");
+
   return (
     <BrowserRouter>
       <Routes>
@@ -16,17 +18,19 @@ function App() {
         <Route
           path="/"
           element={
-            localStorage.getItem("token") ? (
-              <Navigate to="/projects" replace />
-            ) : (
-              <Navigate to="/login" replace />
-            )
+            token ? <Navigate to="/projects" replace /> : <Navigate to="/login" replace />
           }
         />
 
-        {/* Public routes */}
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        {/* Public routes (redirect if already logged in) */}
+        <Route
+          path="/register"
+          element={token ? <Navigate to="/projects" replace /> : <Register />}
+        />
+        <Route
+          path="/login"
+          element={token ? <Navigate to="/projects" replace /> : <Login />}
+        />
 
         {/* Dashboard routes — protected */}
         <Route
