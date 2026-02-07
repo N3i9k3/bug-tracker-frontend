@@ -4,13 +4,15 @@ import {
   Draggable
 } from "@hello-pangea/dnd";
 
+import Comments from "./Comments"; // ⭐ Step 1
+
 const columns = {
   todo: "To Do",
   inprogress: "In Progress",
   done: "Done"
 };
 
-export default function KanbanBoard({ tickets, updateStatus }) {
+export default function KanbanBoard({ tickets, updateStatus, token }) { // ⭐ Step 2
   const onDragEnd = (result) => {
     if (!result.destination) return;
 
@@ -46,10 +48,16 @@ export default function KanbanBoard({ tickets, updateStatus }) {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="bg-white p-3 mb-2 rounded shadow cursor-pointer"
+                          className="bg-white p-3 mb-2 rounded shadow"
                         >
                           <p className="font-medium">{ticket.title}</p>
-                          <p className="text-xs">{ticket.priority}</p>
+                          <p className="text-xs mb-2">{ticket.priority}</p>
+
+                          {/* ⭐ Step 3 — COMMENTS */}
+                          <Comments
+                            ticketId={ticket._id}
+                            token={token}
+                          />
                         </div>
                       )}
                     </Draggable>
