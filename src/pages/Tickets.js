@@ -32,6 +32,9 @@ export default function Tickets() {
     search: searchParams.get("search") || "",
   });
 
+  // Draft filters for inputs (changes before Apply)
+  const [draftFilters, setDraftFilters] = useState(filters);
+
   // ================= FETCH =================
   const fetchTickets = useCallback(async () => {
     try {
@@ -66,7 +69,7 @@ export default function Tickets() {
 
     try {
       await axios.post(
-        `${API_URL}/tickets`, // ✅ live backend
+        `${API_URL}/tickets`,
         { ...form, projectId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -89,7 +92,7 @@ export default function Tickets() {
   const updateStatus = async (id, status) => {
     try {
       await axios.put(
-        `${API_URL}/tickets/${id}/status`, // ✅ live backend
+        `${API_URL}/tickets/${id}/status`,
         { status },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -109,8 +112,10 @@ export default function Tickets() {
       <div className="flex gap-2 mb-4 flex-wrap">
         <select
           className="border p-1"
-          value={filters.status}
-          onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+          value={draftFilters.status}
+          onChange={(e) =>
+            setDraftFilters({ ...draftFilters, status: e.target.value })
+          }
         >
           <option value="">All Status</option>
           <option value="todo">To Do</option>
@@ -120,8 +125,10 @@ export default function Tickets() {
 
         <select
           className="border p-1"
-          value={filters.priority}
-          onChange={(e) => setFilters({ ...filters, priority: e.target.value })}
+          value={draftFilters.priority}
+          onChange={(e) =>
+            setDraftFilters({ ...draftFilters, priority: e.target.value })
+          }
         >
           <option value="">All Priority</option>
           <option value="low">Low</option>
@@ -132,20 +139,24 @@ export default function Tickets() {
         <input
           className="border p-1"
           placeholder="Assignee email"
-          value={filters.assignee}
-          onChange={(e) => setFilters({ ...filters, assignee: e.target.value })}
+          value={draftFilters.assignee}
+          onChange={(e) =>
+            setDraftFilters({ ...draftFilters, assignee: e.target.value })
+          }
         />
 
         <input
           className="border p-1 flex-1"
           placeholder="Search tickets..."
-          value={filters.search}
-          onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+          value={draftFilters.search}
+          onChange={(e) =>
+            setDraftFilters({ ...draftFilters, search: e.target.value })
+          }
         />
 
         <button
           className="bg-blue-500 text-white px-3"
-          onClick={fetchTickets}
+          onClick={() => setFilters(draftFilters)}
         >
           Apply
         </button>
@@ -168,7 +179,9 @@ export default function Tickets() {
             className="border rounded-lg p-2"
             placeholder="Description"
             value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            onChange={(e) =>
+              setForm({ ...form, description: e.target.value })
+            }
           />
 
           <select
