@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { API_URL } from "../config"; // ✅ import live backend
+import { API_URL } from "../config"; // ✅ uses live backend
 
 export default function Login() {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      // ✅ POST to live backend
+      // ✅ POST to live backend using API_URL from config
       const res = await axios.post(`${API_URL}/auth/login`, form);
 
       // ================= STORE AUTH =================
@@ -28,6 +28,7 @@ export default function Login() {
       // ✅ Navigate to projects dashboard
       navigate("/projects");
     } catch (error) {
+      // ✅ Handle errors from backend
       alert(error.response?.data?.message || "Login failed");
       console.error("Login error:", error);
     }
