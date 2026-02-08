@@ -1,4 +1,5 @@
-export const API_URL = process.env.REACT_APP_BACKEND_URL;
+export const API_URL = "https://bug-tracker-backend-58q8.onrender.com/api";
+
 
 
                  
