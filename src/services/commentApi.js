@@ -1,7 +1,8 @@
 import axios from "axios";
+import { API_URL } from "../config"; // ✅ import live backend URL
 
-// use full backend URL
-const API = "http://localhost:5000/api/comments";
+// use live backend URL
+const API = `${API_URL}/comments`;
 
 // GET comments for a ticket
 export const fetchComments = async (ticketId, token) => {

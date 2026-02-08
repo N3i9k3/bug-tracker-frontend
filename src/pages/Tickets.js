@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useParams, useSearchParams } from "react-router-dom";
 import KanbanBoard from "../components/KanbanBoard";
+import { API_URL } from "../config"; // ✅ import live backend URL
 
 export default function Tickets() {
   const { projectId } = useParams();
@@ -37,7 +38,7 @@ export default function Tickets() {
       const query = new URLSearchParams(filters).toString();
 
       const res = await axios.get(
-        `http://localhost:5000/api/tickets/project/${projectId}?${query}`,
+        `${API_URL}/tickets/project/${projectId}?${query}`, // ✅ use live backend
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -45,19 +46,19 @@ export default function Tickets() {
 
       setTickets(res.data || []);
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching tickets:", err);
     }
-  }, [filters, projectId, token]); // ✅ dependencies for fetchTickets
+  }, [filters, projectId, token]);
 
   // ================= SYNC FILTERS → URL =================
   useEffect(() => {
     setSearchParams(filters);
-  }, [filters, setSearchParams]); // ✅ include setSearchParams
+  }, [filters, setSearchParams]);
 
   // ================= AUTO FETCH =================
   useEffect(() => {
     fetchTickets();
-  }, [fetchTickets]); // ✅ include fetchTickets
+  }, [fetchTickets]);
 
   // ================= CREATE =================
   const createTicket = async (e) => {
@@ -65,7 +66,7 @@ export default function Tickets() {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/tickets",
+        `${API_URL}/tickets`, // ✅ live backend
         { ...form, projectId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -80,7 +81,7 @@ export default function Tickets() {
 
       fetchTickets();
     } catch (err) {
-      console.error(err);
+      console.error("Error creating ticket:", err);
     }
   };
 
@@ -88,14 +89,14 @@ export default function Tickets() {
   const updateStatus = async (id, status) => {
     try {
       await axios.put(
-        `http://localhost:5000/api/tickets/${id}/status`,
+        `${API_URL}/tickets/${id}/status`, // ✅ live backend
         { status },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       fetchTickets();
     } catch (err) {
-      console.error(err);
+      console.error("Error updating status:", err);
     }
   };
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { API_URL } from "../config"; // ✅ import live backend
 
 export default function Register() {
   const navigate = useNavigate();
@@ -18,40 +19,31 @@ export default function Register() {
     e.preventDefault();
 
     try {
-      await axios.post(
-        "http://localhost:5000/api/auth/register",
-        form
-      );
+      // ✅ POST to live backend
+      await axios.post(`${API_URL}/auth/register`, form);
 
       alert("Registration successful!");
 
-      // ✅ React navigation (no reload)
+      // ✅ Navigate to login page
       navigate("/login");
-
     } catch (error) {
       alert(error.response?.data?.message || "Registration failed");
+      console.error("Registration error:", error);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 p-6">
-
       {/* Card */}
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 space-y-6">
-
         {/* Heading */}
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-indigo-600">
-            BugTracker
-          </h1>
-          <p className="text-gray-500 text-sm mt-1">
-            Create your account
-          </p>
+          <h1 className="text-3xl font-bold text-indigo-600">BugTracker</h1>
+          <p className="text-gray-500 text-sm mt-1">Create your account</p>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-
           <input
             type="text"
             name="name"
@@ -100,7 +92,6 @@ export default function Register() {
             Sign In
           </Link>
         </p>
-
       </div>
     </div>
   );

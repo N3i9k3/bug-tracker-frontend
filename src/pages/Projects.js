@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { API_URL } from "../config"; // ✅ Use live backend URL
 
 export default function Projects() {
   const [projects, setProjects] = useState([]);
@@ -12,15 +13,14 @@ export default function Projects() {
     if (!token) return;
 
     try {
-      const res = await axios.get("http://localhost:5000/api/projects", {
+      const res = await axios.get(`${API_URL}/projects`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
       setProjects(res.data || []);
     } catch (err) {
       console.error("Error fetching projects:", err);
     }
-  }, [token]); // ✅ include token as dependency
+  }, [token]);
 
   // ===== Create Project =====
   const createProject = async (e) => {
@@ -29,7 +29,7 @@ export default function Projects() {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/projects",
+        `${API_URL}/projects`,
         form,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -47,7 +47,7 @@ export default function Projects() {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/projects/${id}`, {
+      await axios.delete(`${API_URL}/projects/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -57,10 +57,10 @@ export default function Projects() {
     }
   };
 
-  // ✅ Updated useEffect
+  // ===== useEffect to fetch projects =====
   useEffect(() => {
     fetchProjects();
-  }, [fetchProjects]); // include fetchProjects in deps
+  }, [fetchProjects]);
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -90,9 +90,7 @@ export default function Projects() {
               className="border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none w-full"
               placeholder="Description"
               value={form.description}
-              onChange={(e) =>
-                setForm({ ...form, description: e.target.value })
-              }
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
             />
 
             <button
@@ -130,7 +128,7 @@ export default function Projects() {
                   </div>
                 </Link>
 
-                {/* DELETE BUTTON */}
+                {/* Delete Button */}
                 <button
                   onClick={() => deleteProject(p._id)}
                   className="text-red-500 text-sm hover:text-red-700 self-end"

@@ -1,13 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
 import EditTicketModal from "./EditTicketModal";
+import { API_URL } from "../config"; // ✅ import live API URL
 
-export default function TicketCard({
-  ticket,
-  token,
-  user,
-  fetchTickets,
-}) {
+export default function TicketCard({ ticket, token, user, fetchTickets }) {
   const [showEdit, setShowEdit] = useState(false);
 
   // ================= DELETE =================
@@ -15,14 +11,9 @@ export default function TicketCard({
     if (!window.confirm("Delete this ticket?")) return;
 
     try {
-      await axios.delete(
-        `http://localhost:5000/api/tickets/${ticket._id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.delete(`${API_URL}/tickets/${ticket._id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       fetchTickets(); // refresh
     } catch (err) {
@@ -32,21 +23,16 @@ export default function TicketCard({
   };
 
   // ================= PERMISSION CHECK (SAFE) =================
-  const isOwner =
-    ticket.createdBy?.toString() === user?.id; // ✅ use user.id
+  const isOwner = ticket.createdBy?.toString() === user?.id; // ✅ use user.id
 
   // ================= UI =================
   return (
     <div className="bg-white p-3 rounded shadow mb-2 border space-y-2">
       <h4 className="font-semibold">{ticket.title}</h4>
 
-      <p className="text-sm text-gray-600">
-        {ticket.description}
-      </p>
+      <p className="text-sm text-gray-600">{ticket.description}</p>
 
-      <div className="text-xs">
-        Priority: {ticket.priority}
-      </div>
+      <div className="text-xs">Priority: {ticket.priority}</div>
 
       {/* ONLY OWNER CAN EDIT/DELETE */}
       {isOwner && (
@@ -58,10 +44,7 @@ export default function TicketCard({
             Edit
           </button>
 
-          <button
-            className="text-red-600 text-sm"
-            onClick={handleDelete}
-          >
+          <button className="text-red-600 text-sm" onClick={handleDelete}>
             Delete
           </button>
         </div>

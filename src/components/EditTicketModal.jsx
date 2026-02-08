@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { API_URL } from "../config"; // ✅ import live API URL
 
 export default function EditTicketModal({ ticket, token, onClose, onUpdated }) {
   const [form, setForm] = useState({
@@ -12,9 +13,9 @@ export default function EditTicketModal({ ticket, token, onClose, onUpdated }) {
 
   const handleSave = async () => {
     try {
-      // ✅ Use full backend URL
+      // ✅ Use live backend URL
       await axios.put(
-        `http://localhost:5000/api/tickets/${ticket._id}`,
+        `${API_URL}/tickets/${ticket._id}`,
         form,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -58,16 +59,10 @@ export default function EditTicketModal({ ticket, token, onClose, onUpdated }) {
         </select>
 
         <div className="flex justify-end gap-2 mt-2">
-          <button
-            className="px-3 py-1 border rounded"
-            onClick={onClose}
-          >
+          <button className="px-3 py-1 border rounded" onClick={onClose}>
             Cancel
           </button>
-          <button
-            className="bg-blue-500 text-white px-3 py-1 rounded"
-            onClick={handleSave}
-          >
+          <button className="bg-blue-500 text-white px-3 py-1 rounded" onClick={handleSave}>
             Save
           </button>
         </div>
@@ -76,4 +71,3 @@ export default function EditTicketModal({ ticket, token, onClose, onUpdated }) {
     </div>
   );
 }
-

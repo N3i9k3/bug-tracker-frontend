@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { API_URL } from "../config"; // ✅ import live backend
 
 export default function Login() {
   const navigate = useNavigate();
@@ -17,23 +18,18 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        form
-      );
+      // ✅ POST to live backend
+      const res = await axios.post(`${API_URL}/auth/login`, form);
 
       // ================= STORE AUTH =================
-      // token for API calls
-      localStorage.setItem("token", res.data.token);
-
-      // user object for frontend permission checks
-      // ⚠ Make sure backend returns: { _id, name, email, ... }
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem("token", res.data.token); // token for API calls
+      localStorage.setItem("user", JSON.stringify(res.data.user)); // user info
 
       // ✅ Navigate to projects dashboard
       navigate("/projects");
     } catch (error) {
       alert(error.response?.data?.message || "Login failed");
+      console.error("Login error:", error);
     }
   };
 
@@ -90,3 +86,4 @@ export default function Login() {
     </div>
   );
 }
+
