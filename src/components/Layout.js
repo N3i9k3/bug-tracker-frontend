@@ -4,7 +4,7 @@ import { useState } from "react";
 export default function Layout({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false); // mobile sidebar toggle
+  const [open, setOpen] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
@@ -23,10 +23,10 @@ export default function Layout({ children }) {
   const isActive = (path) => location.pathname.startsWith(path);
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC] font-sans text-slate-900">
-      {/* ===============================
-          MOBILE OVERLAY
-      =============================== */}
+    /* 🔥 CHANGE #1 — added w-screen + overflow-x-hidden */
+    <div className="flex min-h-screen w-screen overflow-x-hidden bg-[#F8FAFC] font-sans text-slate-900">
+      
+      {/* MOBILE OVERLAY */}
       {open && (
         <div
           className="fixed inset-0 bg-black/40 z-30 md:hidden"
@@ -34,9 +34,7 @@ export default function Layout({ children }) {
         />
       )}
 
-      {/* ===============================
-          SIDEBAR
-      =============================== */}
+      {/* SIDEBAR */}
       <aside
         className={`
           fixed md:static z-40
@@ -86,15 +84,11 @@ export default function Layout({ children }) {
         </div>
       </aside>
 
-      {/* ===============================
-          MAIN AREA
-      =============================== */}
-      <div className="flex-1 flex flex-col md:ml-0">
+      {/* MAIN AREA */}
+      <div className="flex-1 flex flex-col">
         {/* Navbar */}
         <header className="sticky top-0 z-20 bg-white border-b px-4 py-3 flex justify-between items-center">
-          {/* LEFT */}
           <div className="flex items-center gap-3">
-            {/* Hamburger (mobile only) */}
             <button
               className="md:hidden text-xl"
               onClick={() => setOpen(true)}
@@ -102,19 +96,15 @@ export default function Layout({ children }) {
               ☰
             </button>
 
-            <h1 className="font-semibold text-sm text-red-600 text-2xl">
-  NEW LAYOUT WORKING
-</h1>
-
+            <h1 className="font-semibold text-sm">Dashboard</h1>
           </div>
 
-          {/* Avatar */}
           <div className="h-9 w-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
             {initials}
           </div>
         </header>
 
-        {/* Content */}
+        {/* 🔥 CHANGE #2 — overflow-x-hidden added */}
         <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
           {children}
         </main>
@@ -122,3 +112,4 @@ export default function Layout({ children }) {
     </div>
   );
 }
+
