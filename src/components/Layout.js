@@ -35,17 +35,18 @@ export default function Layout({ children }) {
 
       {/* ================= SIDEBAR ================= */}
       <aside
-        className={`
-          fixed md:static z-40
-          top-0 left-0 h-full
-          w-52                     /* 🔥 reduced from w-64 */
-          bg-slate-900 text-white
-          transform transition-transform duration-300
-          ${open ? "translate-x-0" : "-translate-x-full"}
-          md:translate-x-0
-          flex flex-col shadow-2xl
-        `}
-      >
+  style={{ width: "200px" }}   // 🔥 hard width (cannot fail)
+  className={`
+    fixed md:static z-40
+    top-0 left-0 h-full
+    bg-slate-900 text-white
+    transform transition-transform duration-300
+    ${open ? "translate-x-0" : "-translate-x-full"}
+    md:translate-x-0
+    flex flex-col shadow-2xl
+  `}
+>
+
         {/* Logo */}
         <div className="p-4"> {/* 🔥 reduced padding */}
           <h2 className="text-lg font-bold flex items-center gap-2">
