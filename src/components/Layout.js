@@ -23,7 +23,6 @@ export default function Layout({ children }) {
   const isActive = (path) => location.pathname.startsWith(path);
 
   return (
-    /* 🔥 CHANGE #1 — added w-screen + overflow-x-hidden */
     <div className="flex min-h-screen w-screen overflow-x-hidden bg-[#F8FAFC] font-sans text-slate-900">
       
       {/* MOBILE OVERLAY */}
@@ -34,12 +33,13 @@ export default function Layout({ children }) {
         />
       )}
 
-      {/* SIDEBAR */}
+      {/* ================= SIDEBAR ================= */}
       <aside
         className={`
           fixed md:static z-40
           top-0 left-0 h-full
-          w-64 bg-slate-900 text-white
+          w-52                     /* 🔥 reduced from w-64 */
+          bg-slate-900 text-white
           transform transition-transform duration-300
           ${open ? "translate-x-0" : "-translate-x-full"}
           md:translate-x-0
@@ -47,15 +47,15 @@ export default function Layout({ children }) {
         `}
       >
         {/* Logo */}
-        <div className="p-6">
-          <h2 className="text-xl font-bold flex items-center gap-2">
+        <div className="p-4"> {/* 🔥 reduced padding */}
+          <h2 className="text-lg font-bold flex items-center gap-2">
             <span className="bg-blue-500 p-1.5 rounded-lg">BT</span>
             BugTracker
           </h2>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-4 space-y-2">
+        <nav className="flex-1 px-3 space-y-2">
           <p className="text-xs text-slate-400 uppercase tracking-widest mb-3">
             Main Menu
           </p>
@@ -63,7 +63,7 @@ export default function Layout({ children }) {
           <Link
             to="/projects"
             onClick={() => setOpen(false)}
-            className={`block px-4 py-3 rounded-lg ${
+            className={`block px-3 py-2 rounded-lg ${
               isActive("/projects")
                 ? "bg-blue-600 text-white"
                 : "text-slate-300 hover:bg-slate-800"
@@ -74,17 +74,17 @@ export default function Layout({ children }) {
         </nav>
 
         {/* Bottom */}
-        <div className="p-4 border-t border-slate-800">
+        <div className="p-3 border-t border-slate-800">
           <button
             onClick={logout}
-            className="w-full text-left px-4 py-2 hover:bg-red-500/20 rounded-lg"
+            className="w-full text-left px-3 py-2 hover:bg-red-500/20 rounded-lg"
           >
             🚪 Logout
           </button>
         </div>
       </aside>
 
-      {/* MAIN AREA */}
+      {/* ================= MAIN AREA ================= */}
       <div className="flex-1 flex flex-col">
         {/* Navbar */}
         <header className="sticky top-0 z-20 bg-white border-b px-4 py-3 flex justify-between items-center">
@@ -104,7 +104,6 @@ export default function Layout({ children }) {
           </div>
         </header>
 
-        {/* 🔥 CHANGE #2 — overflow-x-hidden added */}
         <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
           {children}
         </main>
