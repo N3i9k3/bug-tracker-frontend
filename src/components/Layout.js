@@ -23,8 +23,9 @@ export default function Layout({ children }) {
   const isActive = (path) => location.pathname.startsWith(path);
 
   return (
-    <div className="flex min-h-screen w-screen overflow-x-hidden bg-[#F8FAFC] font-sans text-slate-900">
-      
+    /* ✅ FULL HEIGHT APP */
+    <div className="flex h-screen w-screen overflow-hidden bg-[#F8FAFC] font-sans text-slate-900">
+
       {/* MOBILE OVERLAY */}
       {open && (
         <div
@@ -35,20 +36,19 @@ export default function Layout({ children }) {
 
       {/* ================= SIDEBAR ================= */}
       <aside
-  style={{ width: "200px" }}   // 🔥 hard width (cannot fail)
-  className={`
-    fixed md:static z-40
-    top-0 left-0 h-full
-    bg-slate-900 text-white
-    transform transition-transform duration-300
-    ${open ? "translate-x-0" : "-translate-x-full"}
-    md:translate-x-0
-    flex flex-col shadow-2xl
-  `}
->
-
+        className={`
+          fixed md:static z-40
+          top-0 left-0 h-full
+          w-52
+          bg-slate-900 text-white
+          transform transition-transform duration-300
+          ${open ? "translate-x-0" : "-translate-x-full"}
+          md:translate-x-0
+          flex flex-col
+        `}
+      >
         {/* Logo */}
-        <div className="p-4"> {/* 🔥 reduced padding */}
+        <div className="p-4">
           <h2 className="text-lg font-bold flex items-center gap-2">
             <span className="bg-blue-500 p-1.5 rounded-lg">BT</span>
             BugTracker
@@ -74,8 +74,8 @@ export default function Layout({ children }) {
           </Link>
         </nav>
 
-        {/* Bottom */}
-        <div className="p-3 border-t border-slate-800">
+        {/* ✅ ALWAYS STICKS TO BOTTOM */}
+        <div className="p-3 border-t border-slate-800 mt-auto">
           <button
             onClick={logout}
             className="w-full text-left px-3 py-2 hover:bg-red-500/20 rounded-lg"
@@ -85,9 +85,8 @@ export default function Layout({ children }) {
         </div>
       </aside>
 
-      {/* ================= MAIN AREA ================= */}
-      <div className="flex-1 flex flex-col">
-        {/* Navbar */}
+      {/* ================= MAIN ================= */}
+      <div className="flex-1 flex flex-col overflow-hidden">
         <header className="sticky top-0 z-20 bg-white border-b px-4 py-3 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <button
@@ -105,7 +104,7 @@ export default function Layout({ children }) {
           </div>
         </header>
 
-        <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
+        <main className="flex-1 p-4 md:p-8 overflow-auto">
           {children}
         </main>
       </div>
