@@ -102,7 +102,10 @@ export default function Layout({ children }) {
               ☰
             </button>
 
-            <h1 className="font-semibold text-sm">Dashboard</h1>
+            <h1 className="font-semibold text-sm text-red-600 text-2xl">
+  NEW LAYOUT WORKING
+</h1>
+
           </div>
 
           {/* Avatar */}
