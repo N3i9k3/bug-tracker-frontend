@@ -1,70 +1,94 @@
-# Getting Started with Create React App
+# 🚀 Bug Tracker (Jira-style Issue Tracker)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack MERN Bug Tracker where teams can create projects, manage tickets, collaborate using comments, and track work with a Kanban board.
 
-## Available Scripts
+## 🔥 Live Demo
+Frontend: https://bug-tracker-frontend-ashy.vercel.app 
+Backend: https://bug-tracker-backend-58q8.onrender.com
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## ✨ Features
+✅ Secure Authentication (JWT + bcrypt)  
+✅ Project creation & management  
+✅ Ticket CRUD (create, edit, delete)  
+✅ Kanban drag & drop workflow  
+✅ Real-time comments per ticket  
+✅ Filters & search  
+✅ Role-based authorization  
+✅ Toast notifications  
+✅ Mobile responsive UI  
+✅ Cloud deployment (Vercel + Render + Atlas)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🛠 Tech Stack
+### Frontend
+- React
+- TailwindCSS
+- Axios
+- React Router
+- @hello-pangea/dnd
+- react-hot-toast
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Backend
+- Node.js
+- Express
+- MongoDB
+- Mongoose
+- JWT Authentication
 
 ### Deployment
+- Vercel
+- Render
+- MongoDB Atlas
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+## ⚙️ Local Setup
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Backend
+npm run dev
+
+### Frontend
+npm start
+
+---
+
+## 📸 Screenshots
+
+### 🔐 Sign In
+![Sign In](./bug-tracker-frontend/public/screenshots/Signin.png)
+
+### 📝 Register
+![Register](./bug-tracker-frontend/public/screenshots/Register.png)
+
+### 📁 Projects Dashboard
+![Projects](./bug-tracker-frontend/public/screenshots/Projects-page.png)
+
+### 🎯 Tickets / Kanban Board
+![Tickets](./bug-tracker-frontend/public/screenshots/Tickets-page.png)
+
+---
+
+## 📌 What This Project Demonstrates
+
+This project showcases:
+
+• Full-stack MERN architecture  
+• REST API design  
+• Authentication & authorization  
+• State management  
+• Drag-and-drop UX  
+• Cloud deployment  
+• Production-style folder structure  
+
+Designed to simulate real-world team workflows used in modern SaaS products.  
+
+---
+
+## 👤 Author
+
+Nikita 
+Aspiring Full-Stack + Cloud Engineer  
+
