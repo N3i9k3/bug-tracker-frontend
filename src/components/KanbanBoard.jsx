@@ -33,58 +33,58 @@ export default function KanbanBoard({
   // ================= UI =================
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="grid grid-cols-3 gap-4">
+  <div className="p-3 md:p-4">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-        {Object.entries(columns).map(([key, title]) => (
-          <Droppable droppableId={key} key={key}>
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                className="bg-gray-100 p-4 rounded-lg min-h-[400px]"
-              >
-                <h2 className="font-bold mb-3">{title}</h2>
+      {Object.entries(columns).map(([key, title]) => (
+        <Droppable droppableId={key} key={key}>
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className="bg-gray-100 p-3 rounded-lg min-h-[300px] md:min-h-[500px] overflow-y-auto"
+            >
+              <h2 className="font-bold mb-3">{title}</h2>
 
-                {tickets
-                  .filter((t) => (t.status || "todo") === key)
-                  .map((ticket, index) => (
-                    <Draggable
-                      key={ticket._id}
-                      draggableId={ticket._id}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="mb-2"
-                        >
-                          {/* ✅ Ticket UI */}
-                          <TicketCard
-                            ticket={ticket}
-                            token={token}
-                            user={user}
-                            fetchTickets={fetchTickets}
-                          />
+              {tickets
+                .filter((t) => (t.status || "todo") === key)
+                .map((ticket, index) => (
+                  <Draggable
+                    key={ticket._id}
+                    draggableId={ticket._id}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="mb-3"
+                      >
+                        <TicketCard
+                          ticket={ticket}
+                          token={token}
+                          user={user}
+                          fetchTickets={fetchTickets}
+                        />
 
-                          {/* ✅ Comments */}
-                          <Comments
-                            ticketId={ticket._id}
-                            token={token}
-                          />
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
+                        <Comments
+                          ticketId={ticket._id}
+                          token={token}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
 
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      ))}
 
-      </div>
-    </DragDropContext>
+    </div>
+  </div>
+</DragDropContext>
   );
 }
