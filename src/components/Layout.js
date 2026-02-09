@@ -1,8 +1,10 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function Layout({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false); // mobile sidebar toggle
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
@@ -23,35 +25,53 @@ export default function Layout({ children }) {
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] font-sans text-slate-900">
       {/* ===============================
-          SIDEBAR (Desktop only)
+          MOBILE OVERLAY
       =============================== */}
-      <aside className="hidden md:flex w-64 bg-slate-900 text-white flex-col shadow-2xl">
+      {open && (
+        <div
+          className="fixed inset-0 bg-black/40 z-30 md:hidden"
+          onClick={() => setOpen(false)}
+        />
+      )}
+
+      {/* ===============================
+          SIDEBAR
+      =============================== */}
+      <aside
+        className={`
+          fixed md:static z-40
+          top-0 left-0 h-full
+          w-64 bg-slate-900 text-white
+          transform transition-transform duration-300
+          ${open ? "translate-x-0" : "-translate-x-full"}
+          md:translate-x-0
+          flex flex-col shadow-2xl
+        `}
+      >
         {/* Logo */}
-        <div className="p-8">
-          <h2 className="text-2xl font-black tracking-tight flex items-center gap-2">
-            <span className="bg-blue-500 p-1.5 rounded-lg text-white">BT</span>
-            <span>
-              Bug<span className="text-blue-400">Tracker</span>
-            </span>
+        <div className="p-6">
+          <h2 className="text-xl font-bold flex items-center gap-2">
+            <span className="bg-blue-500 p-1.5 rounded-lg">BT</span>
+            BugTracker
           </h2>
         </div>
 
         {/* Navigation */}
         <nav className="flex-1 px-4 space-y-2">
-          <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold px-4 mb-4">
+          <p className="text-xs text-slate-400 uppercase tracking-widest mb-3">
             Main Menu
           </p>
 
           <Link
             to="/projects"
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
+            onClick={() => setOpen(false)}
+            className={`block px-4 py-3 rounded-lg ${
               isActive("/projects")
-                ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
-                : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                ? "bg-blue-600 text-white"
+                : "text-slate-300 hover:bg-slate-800"
             }`}
           >
-            <span>📁</span>
-            <span className="font-medium">Projects</span>
+            📁 Projects
           </Link>
         </nav>
 
@@ -59,60 +79,41 @@ export default function Layout({ children }) {
         <div className="p-4 border-t border-slate-800">
           <button
             onClick={logout}
-            className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all font-medium"
+            className="w-full text-left px-4 py-2 hover:bg-red-500/20 rounded-lg"
           >
             🚪 Logout
           </button>
-
-          <div className="mt-4 px-4 py-2 text-[10px] text-slate-500 text-center italic">
-            © 2026 BugTracker v1.0
-          </div>
         </div>
       </aside>
 
       {/* ===============================
-          MAIN AREA (Full width on mobile)
+          MAIN AREA
       =============================== */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col md:ml-0">
         {/* Navbar */}
-        <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-200 px-4 md:px-8 py-4 flex justify-between items-center">
-          {/* Breadcrumb */}
-          <div>
-            <h1 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">
-              Dashboard
-            </h1>
+        <header className="sticky top-0 z-20 bg-white border-b px-4 py-3 flex justify-between items-center">
+          {/* LEFT */}
+          <div className="flex items-center gap-3">
+            {/* Hamburger (mobile only) */}
+            <button
+              className="md:hidden text-xl"
+              onClick={() => setOpen(true)}
+            >
+              ☰
+            </button>
 
-            <nav className="flex text-xs font-medium text-slate-600">
-              <span className="text-slate-400">App</span>
-              <span className="mx-2">/</span>
-              <span className="capitalize">
-                {location.pathname.replace("/", "") || "home"}
-              </span>
-            </nav>
+            <h1 className="font-semibold text-sm">Dashboard</h1>
           </div>
 
-          {/* Right side */}
-          <div className="flex items-center gap-4">
-            {/* Search (desktop only) */}
-            <div className="hidden md:flex bg-slate-100 border border-slate-200 rounded-full px-4 py-1.5 items-center gap-2">
-              🔍
-              <input
-                type="text"
-                placeholder="Search..."
-                className="bg-transparent border-none outline-none text-sm w-48"
-              />
-            </div>
-
-            {/* Avatar */}
-            <div className="h-10 w-10 rounded-full bg-blue-600 text-white border-2 border-white shadow-sm flex items-center justify-center font-bold cursor-pointer">
-              {initials}
-            </div>
+          {/* Avatar */}
+          <div className="h-9 w-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+            {initials}
           </div>
         </header>
 
-        {/* Page Content */}
-        <main className="flex-1 p-4 md:p-8">
-          <div className="max-w-7xl mx-auto">{children}</div>
+        {/* Content */}
+        <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
+          {children}
         </main>
       </div>
     </div>
