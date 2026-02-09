@@ -4,12 +4,8 @@ export default function Layout({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // ===============================
-  // ✅ Get logged-in user
-  // ===============================
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-  // Generate initials (Nikita Sharma → NS)
   const initials =
     user?.name
       ?.split(" ")
@@ -17,23 +13,19 @@ export default function Layout({ children }) {
       .join("")
       .toUpperCase() || "U";
 
-  // ===============================
-  // ✅ Logout
-  // ===============================
   const logout = () => {
-    localStorage.clear(); // remove token + user
+    localStorage.clear();
     navigate("/login");
   };
 
-  // Helper to determine active route
   const isActive = (path) => location.pathname.startsWith(path);
 
   return (
     <div className="flex min-h-screen bg-[#F8FAFC] font-sans text-slate-900">
       {/* ===============================
-          SIDEBAR
+          SIDEBAR (Desktop only)
       =============================== */}
-      <aside className="fixed inset-y-0 left-0 w-64 bg-slate-900 text-white flex flex-col shadow-2xl z-20">
+      <aside className="hidden md:flex w-64 bg-slate-900 text-white flex-col shadow-2xl">
         {/* Logo */}
         <div className="p-8">
           <h2 className="text-2xl font-black tracking-tight flex items-center gap-2">
@@ -58,7 +50,7 @@ export default function Layout({ children }) {
                 : "text-slate-400 hover:bg-slate-800 hover:text-white"
             }`}
           >
-            <span className="group-hover:scale-110 transition">📁</span>
+            <span>📁</span>
             <span className="font-medium">Projects</span>
           </Link>
         </nav>
@@ -79,11 +71,11 @@ export default function Layout({ children }) {
       </aside>
 
       {/* ===============================
-          MAIN AREA
+          MAIN AREA (Full width on mobile)
       =============================== */}
-      <div className="flex-1 ml-64 flex flex-col">
+      <div className="flex-1 flex flex-col">
         {/* Navbar */}
-        <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-200 px-8 py-4 flex justify-between items-center">
+        <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-200 px-4 md:px-8 py-4 flex justify-between items-center">
           {/* Breadcrumb */}
           <div>
             <h1 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">
@@ -101,7 +93,7 @@ export default function Layout({ children }) {
 
           {/* Right side */}
           <div className="flex items-center gap-4">
-            {/* Search */}
+            {/* Search (desktop only) */}
             <div className="hidden md:flex bg-slate-100 border border-slate-200 rounded-full px-4 py-1.5 items-center gap-2">
               🔍
               <input
@@ -111,7 +103,7 @@ export default function Layout({ children }) {
               />
             </div>
 
-            {/* ✅ Dynamic Avatar */}
+            {/* Avatar */}
             <div className="h-10 w-10 rounded-full bg-blue-600 text-white border-2 border-white shadow-sm flex items-center justify-center font-bold cursor-pointer">
               {initials}
             </div>
@@ -119,7 +111,7 @@ export default function Layout({ children }) {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-8">
+        <main className="flex-1 p-4 md:p-8">
           <div className="max-w-7xl mx-auto">{children}</div>
         </main>
       </div>
